@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "unclebillbot"
+version = "0.1.0"
+description = "God Save The Queen"
+authors = ["Your Name <you@example.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.10"
+openai = "^0.27.2"
+py-cord = {extras = ["voice"], version = "^2.4.1"}
+python-dotenv = "^1.0.0"
+openai-whisper = "^20230314"
+alt-profanity-check = "^1.2.2"
+
+
+[tool.poetry.group.dev.dependencies]
+black = "^23.3.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
