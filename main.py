@@ -5,7 +5,6 @@ import io
 
 import whisper
 import discord
-import openai
 from discord.ext import commands
 from dotenv import load_dotenv
 from profanity_check import predict
@@ -14,10 +13,9 @@ from profanity_check import predict
 load_dotenv()
 
 # Configure OpenAI API key
-openai.api_key = os.getenv("OPENAI_API_TOKEN")
 model = whisper.load_model(
     name="base.en",
-    # device="cpu",
+    device=os.getenv("WHISPER_DEVICE"),
 )
 
 # Initialize Discord bot
@@ -32,7 +30,6 @@ connections = {}
 
 
 async def finished_callback(sink, channel: discord.TextChannel, *args):
-    # recorded_users = [f"<@{user_id}>" for user_id, audio in sink.audio_data.items()]
     await sink.vc.disconnect()
     for user_id in sink.audio_data.keys():
         os.remove(f"/tmp/{user_id}.wav")
@@ -43,11 +40,9 @@ async def on_ready():
     print(f"{bot.user} is ready and online!")
 
 
-@bot.slash_command(
-    description="Sends the bot's latency."
-)  # this decorator makes a slash command
-async def ping(ctx):  # a slash command will be created with the name "ping"
-    await ctx.respond(f"Pong! Latency is {bot.latency}")
+@bot.slash_command(description="Sends the bot's latency.")
+async def ping(ctx):
+    await ctx.respond(f"Pong! Latency is {bot.latency:.3f}ms")
 
 
 @bot.slash_command(name="record", description="Record audio")
